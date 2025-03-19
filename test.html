@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scatta una Foto</title>
+</head>
+<body>
+  <h1>Scatta una Foto!</h1>
+  <video id="video" width="320" height="240" autoplay></video>
+  <canvas id="canvas" style="display:none;"></canvas>
+  <button id="capture" style="display:none;">Scatta Foto</button>
+  
+  <script>
+    // Accesso alla fotocamera
+    const video = document.getElementById('video');
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(function(stream) {
+        video.srcObject = stream;
+
+        // Foto scattata appena il video è pronto
+        video.oncanplay = function() {
+          takePicture(); // Scatta la foto appena possibile
+        };
+      })
+      .catch(function(error) {
+        console.erro
